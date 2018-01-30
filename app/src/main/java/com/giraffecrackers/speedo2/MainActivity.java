@@ -25,12 +25,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     private static final int PERMISSION_REQUEST_LOCATION = 0;
 
-    private float nCurrentSpeed;
-    private double nCurrentSpeedKm;
+    /*private float nCurrentSpeed;
+    private double nCurrentSpeedKm;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideSystemUI();
         setContentView(R.layout.activity_main);
         permissionManager = new PermissionManager() {};
         permissionManager.checkAndRequestPermissions(this);
@@ -55,11 +56,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     }
 
-    @Override
+    /*@Override
     protected void onPause() {
         super.onPause();
         finish();
-    }
+    }*/
 
     @Override
     public void onLocationChanged(Location location) {
@@ -67,12 +68,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         if(location==null){
             //speedTextViev.setText("-.- m/s");
-            speedTextViev.setText("-.- km/h");
+            speedTextViev.setText("0.0\nkm/h");
         }else{
-            nCurrentSpeed = location.getSpeed();
-            nCurrentSpeedKm = Math.floor(nCurrentSpeed * 3.6 * 100.0) / 100.0;
+            float nCurrentSpeed = location.getSpeed();
+            double nCurrentSpeedKm = Math.floor(nCurrentSpeed * 3.6 * 100.0) / 100.0;
             //speedTextViev.setText(nCurrentSpeed + " m/s");
-            speedTextViev.setText(nCurrentSpeedKm + " km/h");
+            speedTextViev.setText(nCurrentSpeedKm + "\nkm/h");
         }
     }
 
@@ -110,6 +111,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
             }
         }
+    }
+    private void hideSystemUI() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
     private Boolean exit = false;
